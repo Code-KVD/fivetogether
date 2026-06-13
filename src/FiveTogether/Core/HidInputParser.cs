@@ -155,7 +155,7 @@ public class HidInputParser : IDisposable
         {
             var dataValue = _inputParser.GetValue(i);
 
-            foreach (var usage in dataValue.Usages.GetAllValues())
+            foreach (var usage in dataValue.Usages)
             {
                 var value = dataValue.GetLogicalValue();
 
@@ -256,7 +256,6 @@ public class HidInputParser : IDisposable
     {
         if (!_disposed)
         {
-            _inputReceiver?.Received -= null;
             _stream?.Dispose();
             _disposed = true;
         }
