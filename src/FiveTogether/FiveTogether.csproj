@@ -6,7 +6,6 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ApplicationIcon>..\..\assets\icon.ico</ApplicationIcon>
     <AssemblyName>FiveTogether</AssemblyName>
     <RootNamespace>FiveTogether</RootNamespace>
     <Version>1.0.0</Version>

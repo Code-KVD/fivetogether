@@ -26,7 +26,6 @@ OutputBaseFilename=FiveTogether_Setup
 Compression=lzma2
 SolidCompression=yes
 PrivilegesRequired=admin
-SetupIconFile=assets\icon.ico
 UninstallDisplayIcon={app}\FiveTogether.exe
 WizardStyle=modern
 DisableProgramGroupPage=yes
