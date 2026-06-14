@@ -79,9 +79,11 @@ public class SlotManager : IDisposable
 
     /// <summary>
     /// Starts a session: hides all real controllers, creates virtual slots,
-    /// and begins input forwarding for the first 4 controllers.
+    /// and begins input forwarding. When <paramref name="orderedControllers"/> is provided
+    /// (from the identify dialog) those controllers fill slots 0-3 in order and the 5th
+    /// is left unassigned (bench). Falls back to detection order if null.
     /// </summary>
-    public (bool Success, string Message) StartSession()
+    public (bool Success, string Message) StartSession(List<PhysicalController>? orderedControllers = null)
     {
         if (_sessionActive)
             return (false, "Session already active.");
@@ -126,8 +128,10 @@ public class SlotManager : IDisposable
             return (false, "Failed to create virtual Xbox controllers via ViGEmBus.");
         }
 
-        // Step 7: Assign and start forwarding for the first 4 controllers
-        var controllersToAssign = _detectedControllers.Take(4).ToList();
+        // Step 7: Assign and start forwarding — use provided order (from identify dialog)
+        // or fall back to detection order. Only the first 4 get active slots.
+        var source = orderedControllers ?? _detectedControllers;
+        var controllersToAssign = source.Take(4).ToList();
         for (int i = 0; i < controllersToAssign.Count; i++)
         {
             var result = AssignControllerToSlot(controllersToAssign[i], i);

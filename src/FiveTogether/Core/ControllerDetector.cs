@@ -61,7 +61,13 @@ public class ControllerDetector
                 $"Controller detection failed: {ex.Message}");
         }
 
-        return controllers;
+        // Deduplicate: one physical device can expose multiple HID collections
+        // (e.g. Col01/Col02 on Xbox controllers). Keep the first entry per InstancePath.
+        return controllers
+            .GroupBy(c => string.IsNullOrEmpty(c.InstancePath) ? c.DevicePath : c.InstancePath,
+                     StringComparer.OrdinalIgnoreCase)
+            .Select(g => g.First())
+            .ToList();
     }
 
     /// <summary>

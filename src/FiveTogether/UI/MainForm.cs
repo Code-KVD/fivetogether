@@ -133,7 +133,24 @@ public partial class MainForm : Form
                 return;
             }
 
-            var (success, message) = _slotManager.StartSession();
+            // Identify dialog: each player presses A to claim their controller
+            List<PhysicalController>? orderedControllers = null;
+            using (var identify = new IdentifyControllersDialog(_slotManager.DetectedControllers.ToList()))
+            {
+                if (identify.ShowDialog(this) != DialogResult.OK)
+                    return;
+
+                if (identify.IdentifiedControllers.Count < 2)
+                {
+                    MessageBox.Show("At least 2 players must press A to start a session.",
+                        "FiveTogether", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                orderedControllers = identify.IdentifiedControllers.Select(x => x.Controller).ToList();
+            }
+
+            var (success, message) = _slotManager.StartSession(orderedControllers);
 
             if (success)
             {
